@@ -1653,6 +1653,45 @@ function R:PrepareOptions()
 						end
 					}
 				}
+			},
+			profilingTools = {
+				name = L["Performance"],
+				type = "group",
+				order = newOrder(),
+				inline = true,
+				args = {
+					disableSorting = {
+						type = "execute",
+						order = newOrder(),
+						-- width = "full",
+						name = L["Disable sorting"],
+						desc = L["Disable sorting inside the main window. Can be used to troubleshoot performance issues."] ..
+							" " .. L["Note: Your existing settings will be overwritten."],
+						func = function(info, val)
+							self.db.profile.sortMode = C.SORT_METHODS.SORT_NONE
+						end
+					},
+					showAccumulatedTimes = {
+						type = "execute",
+						order = newOrder(),
+						-- width = "full",
+						name = L["Show profiling data"],
+						desc = L["Displays accumulated profiling data for the current session."] .. " " ..  L["This is merely a shortcut introduced to make life easier for developers, and as a regular player you can safely ignore it."],
+						func = function(info, val)
+							Rarity.Profiling:InspectAccumulatedTimes()
+						end
+					},
+					resetAccumulatedTimes = {
+						type = "execute",
+						order = newOrder(),
+						-- width = "full",
+						name = L["Reset profiling data"],
+						desc = L["Deletes accumulated profiling data for the current session."] .. " " ..  L["This is merely a shortcut introduced to make life easier for developers, and as a regular player you can safely ignore it."],
+						func = function(info, val)
+							Rarity.Profiling:ResetAccumulatedTimes()
+						end
+					},
+				}
 			}
 		}
 	}
