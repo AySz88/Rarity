@@ -169,6 +169,9 @@ function Sorting.sort2(t)
 end
 
 function Sorting:SortGroup(group, method)
+
+	Rarity.Profiling:StartTimer("SortGroup")
+
 	local sortedGroup = group
 	if method == CONSTANTS.SORT_METHODS.SORT_NAME then
 		sortedGroup = self:sort(group)
@@ -181,6 +184,7 @@ function Sorting:SortGroup(group, method)
 	elseif method == CONSTANTS.SORT_METHODS.SORT_PROGRESS then
 		sortedGroup = self:sort_progress(group)
 	end
+	Rarity.Profiling:EndTimer("SortGroup")
 
 	return sortedGroup
 end
