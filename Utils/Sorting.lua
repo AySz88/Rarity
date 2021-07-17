@@ -169,6 +169,11 @@ function Sorting.sort2(t)
 end
 
 function Sorting:SortGroup(group, method)
+
+	Rarity.Profiling:StartTimer("SortGroup")
+
+	if method == CONSTANTS.SORT_METHODS.SORT_NONE then return self:DebugNoOp(group) end
+
 	local sortedGroup = group
 	if method == CONSTANTS.SORT_METHODS.SORT_NAME then
 		sortedGroup = self:sort(group)
@@ -183,6 +188,23 @@ function Sorting:SortGroup(group, method)
 	end
 
 	return sortedGroup
+end
+
+
+-- Minimum impact NO OP "sort" (for debugging purposes); introduced since disabling sorting entirely didn't work
+function Sorting:DebugNoOp(t)
+
+	local nt = {}
+	local n = 0
+
+	for k, v in pairs(t) do
+		if type(v) == "table" and v.name then
+			n = n + 1
+			nt[n] = v
+		end
+	end
+
+	return nt
 end
 
 function Sorting:sort(t)
