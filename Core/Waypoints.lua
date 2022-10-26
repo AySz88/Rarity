@@ -9,6 +9,10 @@ local Colorize = Rarity.Utils.String.Colorize
 local Count = Rarity.Utils.Table.Count
 local GetMapNameByID = Rarity.MapInfo.GetMapNameByID
 
+local format = format
+local type = type
+local pairs = pairs
+
 -- Constants
 local green = Rarity.Enum.Colors.Green
 local gray = Rarity.Enum.Colors.Gray
@@ -20,7 +24,7 @@ function Waypoints:GetZoneInfoForItem(item)
 		zoneText = self:GetZoneTextForItem(item),
 		inMyZone = self:IsItemInCurrentZone(item),
 		zoneColor = (self:IsItemInCurrentZone(item) and green) or gray,
-		numZones = self:GetNumZonesForItem(item)
+		numZones = self:GetNumZonesForItem(item),
 	}
 	return zoneInfo
 end

@@ -1,97 +1,79 @@
-**r709:**
+**r715:**
 
 Additions:
-> Added tracking for mounts introduced in Chains of Domination 
-> Added tracking for various toys introduced in Chains of Domination
-> Added tracking for most pets introduced in Chains of Domination
+> Added tracking for various collectibles obtained in Zereth Mortis
 
 Changes:
-> Rarity's achievement toast now also supports two lines of text properly, similar to Blizzard's recently-updated version
+> Adjusted the difficulty settings for certain legacy collectibles
 
 Fixes:
-> Fixed an issue where two icons would be displayed in the achievement toast
+> Fixed the attempts detection for Skull of Corruption
+
+Contributors (in alphabetical order):
+> Tommy Godejord
+
+-----
+
+**r714:**
+
+Additions:
+> Added tracking for Shaded Judgement Stone (Korthia/The Maw)
+<br>Added tracking for the various 'dice' toys obtainable only via pickpocketing
+
+Changes:
+> Adjusted the drop rate of several Shadowlands collectibles to more accurately reflect wowhead's data
+
+Fixes:
+> Attempts for the Infinite Timereaver mount should now correctly be detected in the recently-added Timewalking dungeons
+<br>Collectibles that require being affiliated with a different covenant should now correctly be marked as 'unavailable' in the addon's main window
+
+Contributors (in alphabetical order):
+> ithappenedagain
+<br>Tommy Godejord
+
+-----
+
+**r713:**
+
+Additions:
+> Attempts for Reins of the Infinite Timereaver should now also accumulate in Legion Timewalking dungeons
+<br>REVERTED: Added tracking for Illidari Doomhawk and Doomwalker Trophy Stand (17th anniversary)
+<br>Added tracking for the convenant-specific toys added in patch 9.1.5 (obtained from Callings)
+
+Fixes:
+> Fixed an error in the spell detection that caused attempts for custom items using Pick Pocket to not be detected
 
 Developer Notes:
-> There are a number of collectibles we don't currently have sufficient data on. These will be added as soon™ as possible, but it might still take a while.
+> Blizzard hotfixed the anniversary drops to be guaranteed. As such they've been removed from Rarity again.
 
 Contributors (in alphabetical order):
 > Tommy Godejord
 
 -----
 
-**r708:**
+**r712:**
 
 Additions:
-> Added tracking for Gilded Water (pet)
-> Added tracking for Outrider's Bridle Chain (toy)
-> Added a holiday-style reminder for when Dunegorger Kraulok is available (experimental)
-
-Changes:
-> The /rarity verify slash command used for validating the item database is now available as /rarity validate
+> Added tracking for Gilded Darknight
 
 Fixes:
-> Items obtainable from the Black Market auction house are now flagged as such
-> All items should now be assigned a zone, so that filtering by the current zone no longer incorrectly excludes them
-> Tracking for the Ascended Skymane mount should now be working on non-English client locales
+> The main window should again be rendered properly (previously broken by patch 9.1.5 API changes)
 
 Contributors (in alphabetical order):
 > Tommy Godejord
 
 -----
 
-**r707:**
-
-Changes:
-> The tooltip text for faction-restricted items is now dynamically colored based on whether it's available to the logged-in character
-
-Fixes:
-> Fixed an issue where looting Forgotten Chests in Stormsong Valley would cause attempts to be added for Silessa's Battle Harness and Stony's Infused Ruby
-
-Contributors (in alphabetical order):
-> Nick Bayley
-> Tommy Godejord
-
------
-
-**r706:**
+**r711:**
 
 Additions:
-> Added an option to disable the achievement toast (popup) and sound effect triggered whenever a tracked item is found
-> Added tracking for Pterrordax Egg (Zandalar)
-> Added tracking for Piccolo of the Flaming Fire (Stratholme)
-> Added an option to delay the tooltip (i.e., how long the icon should be hovered over before it is shown)
-> Added tracking for Lucy's Lost Collar (Shadowlands)
+> Added tracking for Adamant Vaults Cell
 
 Changes:
-> Skyshards are now tracked repeatedly by default
+> The mini map button is now displayed by default, to hopefully improve the experience for first-time users
 
 Fixes:
-> Clicking the achievement toast (popup) displayed when a tracked item is found should no longer cause a script error
-> Skyshards should now also be tracked in the corrupted (instanced) version of the Shrine of Seven Stars
-> Calendar-based notifications should now be triggered correctly for all holiday event items that Rarity tracks by default
+> Fixed an issue that prevented item information being displayed in the game tooltip for items using the ZONE (zonewide) detection method
 
 Contributors (in alphabetical order):
-> Nick Bayley
 > Tommy Godejord
-
------
-
-**r705:**
-
-Additions:
-> Added tracking for various Shadowlands pets and toys that were previously missing
-> Added tracking for Smoldering Ember Wyrm (Return to Karazhan)
-> Added tracking for Gloop (Corrupted Vale of Eternal Blossoms/Uldum)
-> Added tooltips for achievement-related rares in Nazjatar, Mechagon Island, as well as Shadowlands zones
-
-Changes:
-> The main tooltip's sort order can now also be changed by CTRL-clicking on the tooltip header (in addition to clicking on the LDB icon/minimap button)
-
-Fixes:
-> Fixed an issue where duplicate attempts would be detected when defeating certain Timewalking encounters
-> Fixed waypoint data (including the displayed zone) for certain legacy collectibles
-> Fixed tracking for Mechagon Peacekeeper, Golden Snorf, and Microbot 8D (Operation: Mechagon)
-> Mining Elementium veins should now add attempts for Elementium Geode in all Cataclysm zones
-
-Contributors (in alphabetical order):
-> Tommy Godejord (https://github.com/godejord)

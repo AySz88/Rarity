@@ -13,11 +13,7 @@ local min = min
 local max = max
 
 -- Locals
-local DC = {
-	messages = {},
-	print = print,
-	cacheSize = 250
-}
+local DC = { messages = {}, print = print, cacheSize = 250 }
 
 -- Prints a string representation of the internal state (not including the actual messages)
 function DC:Debug()
@@ -78,11 +74,7 @@ function DC:AddMessage(text, category)
 	text = text or ""
 
 	-- Create wrapper object
-	message = {
-		text = text,
-		category = category,
-		timestamp = time()
-	}
+	local message = { text = text, category = category, timestamp = time() }
 
 	-- Update cache
 	if self.cacheSize == #self.messages then -- Drop first item (FIFO)

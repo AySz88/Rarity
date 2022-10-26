@@ -1,8 +1,9 @@
 ## Author: Allara
-## Interface: 90100
-## X-Min-Interface: 90100
+## Interface: 90200
+## X-Min-Interface: 90200
 ## Title: Rarity
 ## Version: 1.0 (@project-version@)
+## X-Curse-Project-ID: 30801
 
 ## Notes: Tracks rare drops, including companions and mounts
 ## Notes-ruRU: @localization(locale="ruRU", key="Notes", namespace="ToC - Table of Contents")@
@@ -108,8 +109,10 @@ Utils\Table.lua
 Utils\Time.lua
 
 # Wrappers for external libraries (to provide a consistent API)
+Core\Interoperability\LibQTip\Tooltips.lua
 Core\Interoperability\LibSink\Output.lua
 Core\Interoperability\TradeSkillMaster\AuctionDB.lua
+Core\Interoperability\WoWUnit\Testing.lua
 
 # Wrappers for the WOW API (to provide a consistent API)
 Core\Interoperability\Blizzard\MapInfo.lua
@@ -134,6 +137,7 @@ Core\Waypoints.lua
 
 # UI
 Core\GUI\AnchoredTrackingBar.lua
+Core\GUI\CopyPastePopup.lua
 Core\GUI\DataBrokerDisplay.lua
 Core\GUI\FauxAchievementPopup.lua
 Core\GUI\GameTooltipHooks.lua

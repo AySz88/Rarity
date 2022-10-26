@@ -104,9 +104,7 @@ function Serialization:ImportFromBunnyHunter()
 
 	if BunnyHunterDB then
 		StaticPopupDialogs["RARITY_IMPORT_FROM_BUNNYHUNTER"] = {
-			text = L[
-				"Bunny Hunter is running. Would you like Rarity to import data from Bunny Hunter now? Disable Bunny Hunter or click Yes if you don't want to be asked again."
-			],
+			text = L["Bunny Hunter is running. Would you like Rarity to import data from Bunny Hunter now? Disable Bunny Hunter or click Yes if you don't want to be asked again."],
 			button1 = YES,
 			button2 = NO,
 			hideOnEscape = 1,
@@ -133,7 +131,12 @@ function Serialization:ImportFromBunnyHunter()
 							for itemkey, item in pairs(group) do
 								if item.itemId == tonumber(k) then
 									for kk, vv in pairs(v) do
-										self:Debug("%s: adding a kill after %d attempts, %s time", itemkey, vv.loots, FormatTime(vv.time))
+										self:Debug(
+											"%s: adding a kill after %d attempts, %s time",
+											itemkey,
+											vv.loots,
+											FormatTime(vv.time)
+										)
 										if not item.finds then
 											item.finds = {}
 										end
@@ -141,16 +144,13 @@ function Serialization:ImportFromBunnyHunter()
 										for x, y in pairs(item.finds) do
 											count = count + 1
 										end
-										table.insert(
-											item.finds,
-											{
-												num = count + 1,
-												totalAttempts = vv.loots,
-												totalTime = vv.time,
-												attempts = vv.loots,
-												time = vv.time
-											}
-										)
+										table.insert(item.finds, {
+											num = count + 1,
+											totalAttempts = vv.loots,
+											totalTime = vv.time,
+											attempts = vv.loots,
+											time = vv.time,
+										})
 										item.totalFinds = (item.totalFinds or 0) + 1
 									end
 								end
@@ -204,29 +204,23 @@ function Serialization:ImportFromBunnyHunter()
 				end
 				self:UpdateInterestingThings()
 				Rarity.GUI:UpdateText()
-				--if self:InTooltip() then self:ShowTooltip() end
+				-- if self:InTooltip() then self:ShowTooltip() end
 				self.db.profile.importedFromBunnyHunter = true
 				self:Print(L["Data has been imported from Bunny Hunter"])
-			end
+			end,
 		}
 		StaticPopup_Show("RARITY_IMPORT_FROM_BUNNYHUNTER")
 	end
 end
 
 -- Compression encoding
-local encode_translate = {
-	[255] = "\255\001",
-	[0] = "\255\002"
-}
+local encode_translate = { [255] = "\255\001", [0] = "\255\002" }
 
 local function encode_helper(char)
 	return encode_translate[char:byte()]
 end
 
-local decode_translate = {
-	["\001"] = "\255",
-	["\002"] = "\000"
-}
+local decode_translate = { ["\001"] = "\255", ["\002"] = "\000" }
 
 local function decode_helper(text)
 	return decode_translate[text]

@@ -1,11 +1,9 @@
 --- Init.lua
 -- Initialisation of the global addon structures
-
 -- Load dependencies
 -- Note: Ideally, this would be saved in the addon table
 -- It'll remain global for the time being in order to maintain backwards compatibility
-Rarity =
-	LibStub("AceAddon-3.0"):NewAddon(
+Rarity = LibStub("AceAddon-3.0"):NewAddon(
 	"Rarity",
 	"AceConsole-3.0",
 	"AceEvent-3.0",

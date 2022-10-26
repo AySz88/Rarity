@@ -4,24 +4,19 @@ local _, addonTable = ...
 local L = LibStub("AceLocale-3.0"):GetLocale("Rarity")
 local dbicon = LibStub("LibDBIcon-1.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
-local qtip = LibStub("LibQTip-1.0")
 
 -- Upvalues
 local R = Rarity
 local GUI = Rarity.GUI
 local CONSTANTS = addonTable.constants
 
-local dataobj =
-	ldb:NewDataObject(
-	"Rarity",
-	{
-		type = "data source",
-		text = L["Loading"],
-		label = "Rarity",
-		tocname = "Rarity",
-		icon = [[Interface\Icons\spell_nature_forceofnature]]
-	}
-)
+local dataobj = ldb:NewDataObject("Rarity", {
+	type = "data source",
+	text = L["Loading"],
+	label = "Rarity",
+	tocname = "Rarity",
+	icon = [[Interface\Icons\spell_nature_forceofnature]],
+})
 GUI.dataobj = dataobj
 
 function GUI:RegisterDataBroker()
@@ -74,15 +69,15 @@ function dataobj:OnClick(button)
 	elseif IsControlKeyDown() and isLeftButton then
 		Rarity.GUI:SelectNextSortOrder()
 	elseif
-		((self.db.profile.tooltipActivation == CONSTANTS.TOOLTIP.ACTIVATION_METHOD_CLICK and isRightButton) or
-			(self.db.profile.tooltipActivation == CONSTANTS.TOOLTIP.ACTIVATION_METHOD_HOVER and isLeftButton))
-	 then
+		(self.db.profile.tooltipActivation == CONSTANTS.TOOLTIP.ACTIVATION_METHOD_CLICK and isRightButton)
+		or (self.db.profile.tooltipActivation == CONSTANTS.TOOLTIP.ACTIVATION_METHOD_HOVER and isLeftButton)
+	then
 		-- Toggle progress bar visibility
 		R.db.profile.bar.visible = not R.db.profile.bar.visible
 		Rarity.GUI:UpdateBar()
 		Rarity.GUI:UpdateText()
 	elseif self.db.profile.tooltipActivation == CONSTANTS.TOOLTIP.ACTIVATION_METHOD_CLICK and isLeftButton then
-		if qtip:IsAcquired("RarityTooltip") then
+		if Rarity.Tooltips:IsTooltipAcquired("RarityTooltip") then
 			Rarity:HideTooltip()
 		else
 			Rarity:HideQuicktip()
@@ -97,9 +92,10 @@ function GUI:UpdateText()
 	self = Rarity
 
 	if not Rarity.Caching:IsReady() then
-		dataobj.text =
-			L["Loading"] ..
-			" (" .. format("%d%%", Rarity.Caching:GetPrimedItems() / Rarity.Caching:GetItemsToPrime() * 100) .. ")"
+		dataobj.text = L["Loading"]
+			.. " ("
+			.. format("%d%%", Rarity.Caching:GetPrimedItems() / Rarity.Caching:GetItemsToPrime() * 100)
+			.. ")"
 		return
 	end
 
@@ -113,17 +109,8 @@ function GUI:UpdateText()
 	end
 
 	-- Feed text
-	local itemName,
-		itemLink,
-		itemRarity,
-		itemLevel,
-		itemMinLevel,
-		itemType,
-		itemSubType,
-		itemStackCount,
-		itemEquipLoc,
-		itemTexture,
-		itemSellPrice = GetItemInfo(trackedItem.itemId)
+	local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
+		GetItemInfo(trackedItem.itemId)
 	if not itemTexture then
 		dataobj.icon = [[Interface\Icons\spell_nature_forceofnature]]
 	else
@@ -201,8 +188,7 @@ function GUI:UpdateText()
 	end
 	local text = format("%s: %d (%.2f%%)", itemName or trackedItem.name, attempts, chance)
 	if not self.bar then
-		self.bar =
-			self.barGroup:NewCounterBar(
+		self.bar = self.barGroup:NewCounterBar(
 			"Track",
 			text,
 			chance,
@@ -238,7 +224,8 @@ function GUI:UpdateText()
 			itemStackCount,
 			itemEquipLoc,
 			itemTexture,
-			itemSellPrice = GetItemInfo(trackedItem2.itemId)
+			itemSellPrice =
+			GetItemInfo(trackedItem2.itemId)
 		attempts = 0
 		if trackedItem2.attempts then
 			attempts = trackedItem2.attempts
@@ -277,8 +264,7 @@ function GUI:UpdateText()
 		end
 		text = format("%s: %d (%.2f%%)", trackedItem2.name or "", attempts, chance)
 		if not self.bar2 then
-			self.bar2 =
-				self.barGroup:NewCounterBar(
+			self.bar2 = self.barGroup:NewCounterBar(
 				"Track2",
 				text,
 				chance,

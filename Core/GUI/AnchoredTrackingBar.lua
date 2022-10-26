@@ -1,4 +1,3 @@
-
 -- Upvalues
 local GUI = Rarity.GUI
 

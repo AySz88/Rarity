@@ -40,7 +40,7 @@ end
 -- @param priceSource A string representing the price source
 -- @return True if TSM recognized the price source; false (nil) otherwise
 function AuctionDB:IsValidPriceSource(priceSource)
-	if not type(priceSource) == "string" then
+	if type(priceSource) ~= "string" then
 		return
 	end
 
@@ -80,7 +80,9 @@ function AuctionDB:GetMarketPrice(itemID, priceSource, formatAsString)
 	end
 
 	if not self:IsValidPriceSource(priceSource) then
-		Rarity:Debug(format("Failed to GetMarketPrice for item %d and priceSource %s (not recognized)", itemID, priceSource))
+		Rarity:Debug(
+			format("Failed to GetMarketPrice for item %d and priceSource %s (not recognized)", itemID, priceSource)
+		)
 		return
 	end
 

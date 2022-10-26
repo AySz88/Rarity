@@ -11,17 +11,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale("Rarity")
 
 -- Fake achievement popup stuff
 local function RarityAchievementAlertFrame_SetUp(frame, itemId, attempts)
-	local itemName,
-		itemLink,
-		itemRarity,
-		itemLevel,
-		itemMinLevel,
-		itemType,
-		itemSubType,
-		itemStackCount,
-		itemEquipLoc,
-		itemTexture,
-		itemSellPrice = GetItemInfo(itemId)
+	local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
+		GetItemInfo(itemId)
 	if itemName == nil then
 		return
 	end
@@ -41,7 +32,7 @@ local function RarityAchievementAlertFrame_SetUp(frame, itemId, attempts)
 
 	AchievementShield_SetPoints(0, shieldPoints, GameFontNormal, GameFontNormalSmall)
 
-	if (frame.guildDisplay or frame.oldCheevo) then
+	if frame.guildDisplay or frame.oldCheevo then
 		frame.oldCheevo = nil
 		shieldPoints:Show()
 		shieldIcon:Show()
@@ -55,7 +46,7 @@ local function RarityAchievementAlertFrame_SetUp(frame, itemId, attempts)
 		background:SetPoint("TOPLEFT", 0, 0)
 		background:SetPoint("BOTTOMRIGHT", 0, 0)
 		local iconBorder = frame.Icon.Overlay
-		iconBorder:SetAtlas("ui-achievement-guild-iconframe", TextureKitConstants.UseAtlasSize);
+		iconBorder:SetAtlas("ui-achievement-guild-iconframe", TextureKitConstants.UseAtlasSize)
 		iconBorder:SetPoint("CENTER", -1, 2)
 		frame.Icon:SetPoint("TOPLEFT", -26, 16)
 		displayName:SetPoint("BOTTOMLEFT", 72, 36)
@@ -68,12 +59,12 @@ local function RarityAchievementAlertFrame_SetUp(frame, itemId, attempts)
 		frame.GuildName:Hide()
 		frame.GuildBorder:Hide()
 		frame.GuildBanner:Hide()
-		frame.glow:SetAtlas("ui-achievement-guild-glow", TextureKitConstants.UseAtlasSize);
-		frame.shine:SetAtlas("ui-achievement-guild-shine", TextureKitConstants.UseAtlasSize);
+		frame.glow:SetAtlas("ui-achievement-guild-glow", TextureKitConstants.UseAtlasSize)
+		frame.shine:SetAtlas("ui-achievement-guild-shine", TextureKitConstants.UseAtlasSize)
 		frame.shine:SetPoint("BOTTOMLEFT", 0, 8)
 	end
 
-	shieldIcon:SetAtlas("UI-Achievement-Shield-NoPoints", TextureKitConstants.UseAtlasSize);
+	shieldIcon:SetAtlas("UI-Achievement-Shield-NoPoints", TextureKitConstants.UseAtlasSize)
 
 	frame.Icon.Texture:SetTexture(itemTexture)
 	frame:EnableMouse(false) -- Make achievement toast unclickable
@@ -82,7 +73,10 @@ local function RarityAchievementAlertFrame_SetUp(frame, itemId, attempts)
 		attempts = 1
 	end
 	-- It's a quick 'n' dirty fix, but that's probably the least of our worries here...
-	local item = Rarity.db.profile.groups.mounts[itemName] or Rarity.db.profile.groups.pets[itemName] or Rarity.db.profile.groups.items[itemName] or Rarity.db.profile.groups.custom[itemName]
+	local item = Rarity.db.profile.groups.mounts[itemName]
+		or Rarity.db.profile.groups.pets[itemName]
+		or Rarity.db.profile.groups.items[itemName]
+		or Rarity.db.profile.groups.user[itemName]
 	if item and item.method and item.method == CONSTANTS.DETECTION_METHODS.COLLECTION then
 		unlocked:SetText(L["Collection Complete"])
 	else
@@ -107,11 +101,9 @@ end
 
 local RarityAchievementAlertSystem =
 	AlertFrame:AddQueuedAlertFrameSubSystem("AchievementAlertFrameTemplate", RarityAchievementAlertFrame_SetUp, 2, 6)
-RarityAchievementAlertSystem:SetCanShowMoreConditionFunc(
-	function()
-		return not C_PetBattles.IsInBattle()
-	end
-)
+RarityAchievementAlertSystem:SetCanShowMoreConditionFunc(function()
+	return not C_PetBattles.IsInBattle()
+end)
 
 local Output = Rarity.Output
 
@@ -122,17 +114,8 @@ function R:ShowFoundAlert(itemId, attempts, item)
 		item = trackedItem
 	end
 
-	local itemName,
-		itemLink,
-		itemRarity,
-		itemLevel,
-		itemMinLevel,
-		itemType,
-		itemSubType,
-		itemStackCount,
-		itemEquipLoc,
-		itemTexture,
-		itemSellPrice = GetItemInfo(itemId)
+	local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
+		GetItemInfo(itemId)
 	if itemName == nil then
 		return
 	end -- Server doesn't know this item, we can't award it
@@ -158,7 +141,7 @@ function R:ShowFoundAlert(itemId, attempts, item)
 	-- The following code is adapted from Blizzard's AlertFrameMixin:OnEvent function found in FrameXML\AlertFrames.lua [heavily updated in 7.0]
 	-- Presumably, this is now outdated (as of 9.0) so maybe copy/pasting it wasn't the best idea? :P
 
-	if (not AchievementFrame) then
+	if not AchievementFrame then
 		AchievementFrame_LoadUI()
 	end
 
@@ -168,16 +151,13 @@ function R:ShowFoundAlert(itemId, attempts, item)
 		PlaySound(12891) -- UI_Alert_AchievementGained
 	end
 
-	self:ScheduleTimer(
-		function()
-			-- Take a screenshot
-			if Rarity.db.profile.takeScreenshot then
-				if (ActionStatus:IsShown()) then
-					ActionStatus:Hide()
-				end
-				Screenshot()
+	self:ScheduleTimer(function()
+		-- Take a screenshot
+		if Rarity.db.profile.takeScreenshot then
+			if ActionStatus:IsShown() then
+				ActionStatus:Hide()
 			end
-		end,
-		2
-	)
+			Screenshot()
+		end
+	end, 2)
 end

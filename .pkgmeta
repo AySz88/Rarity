@@ -43,9 +43,7 @@ externals:
     Libs/LibStub:
         url: https://repos.wowace.com/wow/ace3/trunk/LibStub
         tag: latest
-    Libs/LibQTip-1.0:
-        url: https://repos.wowace.com/wow/libqtip-1-0
-        tag: latest
+    Libs/LibQTip-1.0: https://repos.wowace.com/wow/libqtip-1-0
     Libs/LibDBIcon-1.0:
         url: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
         tag: latest
@@ -79,7 +77,7 @@ externals:
     Libs/AceSerializer-3.0:
         url: https://repos.wowace.com/wow/ace3/trunk/AceSerializer-3.0
         tag: latest
-            
+
 tools-used:
     - libdatabroker-1-1
     - addon-loader
@@ -91,3 +89,4 @@ ignore:
  - README.MD
  - Changes.lua
  - .luacheckrc
+ - autoformat.sh

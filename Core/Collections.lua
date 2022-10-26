@@ -98,21 +98,13 @@ function Collections:ScanExistingItems(reason)
 	-- Scans need to index by spellId, creatureId, achievementId, raceId, itemId (for toys), statisticId (which is a table; for stats)
 
 	-- Mounts (pre-7.0)
-	if (C_MountJournal.GetMountInfo ~= nil) then
+	if C_MountJournal.GetMountInfo ~= nil then
 		-- Mounts (7.0+)
 		for id = 1, C_MountJournal.GetNumMounts() do
-			local creatureName,
-				spellId,
-				icon,
-				active,
-				isUsable,
-				sourceType,
-				isFavorite,
-				isFactionSpecific,
-				faction,
-				hideOnChar,
-				isCollected = C_MountJournal.GetMountInfo(id)
-			local creatureDisplayID, descriptionText, sourceText, isSelfMount, mountType = C_MountJournal.GetMountInfoExtra(id)
+			local creatureName, spellId, icon, active, isUsable, sourceType, isFavorite, isFactionSpecific, faction, hideOnChar, isCollected =
+				C_MountJournal.GetMountInfo(id)
+			local creatureDisplayID, descriptionText, sourceText, isSelfMount, mountType =
+				C_MountJournal.GetMountInfoExtra(id)
 
 			Rarity.mount_sources[spellId] = sourceText
 
@@ -179,7 +171,7 @@ function Collections:ScanExistingItems(reason)
 	end
 
 	-- Battle pets across your account
-	if (C_PetJournal.SetFlagFilter ~= nil) then -- Pre-7.0
+	if C_PetJournal.SetFlagFilter ~= nil then -- Pre-7.0
 		C_PetJournal.SetFlagFilter(_G.LE_PET_JOURNAL_FLAG_COLLECTED, true)
 		C_PetJournal.SetFlagFilter(_G.LE_PET_JOURNAL_FLAG_FAVORITES, false)
 		C_PetJournal.SetFlagFilter(_G.LE_PET_JOURNAL_FLAG_NOT_COLLECTED, true)
@@ -194,24 +186,8 @@ function Collections:ScanExistingItems(reason)
 	end
 	local total, numOwnedPets = C_PetJournal.GetNumPets()
 	for i = 1, total do
-		local petID,
-			speciesID,
-			owned,
-			customName,
-			level,
-			favorite,
-			isRevoked,
-			speciesName,
-			icon,
-			petType,
-			companionID,
-			tooltip,
-			description,
-			isWild,
-			canBattle,
-			isTradeable,
-			isUnique,
-			obtainable = C_PetJournal.GetPetInfoByIndex(i)
+		local petID, speciesID, owned, customName, level, favorite, isRevoked, speciesName, icon, petType, companionID, tooltip, description, isWild, canBattle, isTradeable, isUnique, obtainable =
+			C_PetJournal.GetPetInfoByIndex(i)
 		Rarity.pet_sources[companionID] = tooltip
 		if owned then
 			for k, v in pairs(R.db.profile.groups) do
@@ -375,30 +351,18 @@ function R:ScanArchFragments(event)
 	if scan then
 		-- Scan now, and later. The server takes a while to decide on the next project. The time it takes varies considerably.
 		self:ScanArchProjects(event)
-		self:ScheduleTimer(
-			function()
-				R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 1")
-			end,
-			2
-		)
-		self:ScheduleTimer(
-			function()
-				R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 2")
-			end,
-			5
-		)
-		self:ScheduleTimer(
-			function()
-				R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 3")
-			end,
-			10
-		)
-		self:ScheduleTimer(
-			function()
-				R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 4")
-			end,
-			20
-		)
+		self:ScheduleTimer(function()
+			R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 1")
+		end, 2)
+		self:ScheduleTimer(function()
+			R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 2")
+		end, 5)
+		self:ScheduleTimer(function()
+			R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 3")
+		end, 10)
+		self:ScheduleTimer(function()
+			R:ScanArchProjects("SOLVED AN ARTIFACT - DELAYED 4")
+		end, 20)
 	end
 end
 

@@ -64,17 +64,8 @@ function Session:End()
 		local trackedItem2 = Rarity.Tracking:GetTrackedItem(2)
 
 		if trackedItem and trackedItem.itemId then
-			local itemName,
-				itemLink,
-				itemRarity,
-				itemLevel,
-				itemMinLevel,
-				itemType,
-				itemSubType,
-				itemStackCount,
-				itemEquipLoc,
-				itemTexture,
-				itemSellPrice = GetItemInfo(trackedItem.itemId)
+			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
+				GetItemInfo(trackedItem.itemId)
 			local len = sessionLast - sessionStarted
 			local i = Rarity.Tracking:FindTrackedItem()
 			if i then
@@ -92,20 +83,15 @@ function Session:End()
 				end
 				i.session.time = (i.session.time or 0) + len
 			end
-			self:Debug("Ending session for %s (%s)", itemLink or "ITEM_LINK_UNAVAILABLE", FormatTime(trackedItem.time or 0))
+			self:Debug(
+				"Ending session for %s (%s)",
+				itemLink or "ITEM_LINK_UNAVAILABLE",
+				FormatTime(trackedItem.time or 0)
+			)
 		end
 		if trackedItem2 and trackedItem2.itemId then
-			local itemName,
-				itemLink,
-				itemRarity,
-				itemLevel,
-				itemMinLevel,
-				itemType,
-				itemSubType,
-				itemStackCount,
-				itemEquipLoc,
-				itemTexture,
-				itemSellPrice = GetItemInfo(trackedItem2.itemId)
+			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
+				GetItemInfo(trackedItem2.itemId)
 			local len = sessionLast - sessionStarted
 			local i = trackedItem2
 			if i then
@@ -151,7 +137,7 @@ function Session:Update()
 	self = Rarity
 	if inSession then
 		sessionLast = GetTime()
-		--self:Debug("Extending current session")
+		-- self:Debug("Extending current session")
 		if sessionTimer then
 			self:CancelTimer(sessionTimer, true)
 		end
