@@ -12,6 +12,8 @@ local lbz = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
 --- WoW API
 local GetBestMapForUnit = _G.C_Map.GetBestMapForUnit
 local IsQuestFlaggedCompleted = _G.C_QuestLog.IsQuestFlaggedCompleted
+local UnitFactionGroup = _G.UnitFactionGroup
+local GetItemInfo = _G.C_Item.GetItemInfo
 --- Addon API
 local CONSTANTS = addonTable.constants
 local colorize = Rarity.Utils.String.Colorize
@@ -24,14 +26,25 @@ local gray = Rarity.Enum.Colors.Gray
 local white = Rarity.Enum.Colors.White
 
 -- Game Tooltip hijacking stuff
-_G.GameTooltip:HookScript("OnTooltipSetUnit", function(self)
-	-- If debug mode is on, find NPCID from mouseover target and append it to the tooltip
-	if R.db.profile.debugMode then
-		GameTooltip:AddLine("NPCID: " .. R:GetNPCIDFromGUID(UnitGUID("mouseover")), 255, 255, 255)
+local function onTooltipSetUnit(tooltip, data)
+	if tooltip ~= _G.GameTooltip then
+		return -- Probably a tooltip created by another addon, that does use the new GameTooltipDataMixin (triggers post-hooks globally...)
 	end
+
+	local self = tooltip -- For backwards compatibility with the legacy code below (should be refactored eventually...)
 
 	if not R.db or R.db.profile.enableTooltipAdditions == false then
 		return
+	end
+
+	if not self.GetUnit then
+		-- Probably a tooltip created by another addon, that hasn't been updated to use GameTooltipDataMixin (risky assumption)
+		return
+	end
+
+	-- If debug mode is on, find NPCID from mouseover target and append it to the tooltip
+	if R.db.profile.debugMode then
+		GameTooltip:AddLine("NPCID: " .. R:GetNPCIDFromGUID(UnitGUID("mouseover")), 255, 255, 255)
 	end
 
 	local name, unit = self:GetUnit()
@@ -81,7 +94,10 @@ _G.GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 					local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
 						GetItemInfo(v.itemId)
 					if itemLink or itemName or v.name then
-						if v.known and R.db.profile.hideKnownItemsInTooltip then
+						if
+							(v.known and R.db.profile.hideKnownItemsInTooltip)
+							or (not v.enabled and R.db.profile.hideUntrackedItemsInTooltip)
+						then
 							GameTooltip:Show()
 						else
 							if not blankAdded and R.db.profile.blankLineBeforeTooltipAdditions then
@@ -304,7 +320,10 @@ _G.GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 								local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
 									GetItemInfo(vv.itemId)
 								if itemLink or itemName or vv.name then
-									if vv.known and R.db.profile.hideKnownItemsInTooltip then
+									if
+										(vv.known and R.db.profile.hideKnownItemsInTooltip)
+										or (not vv.enabled and R.db.profile.hideUntrackedItemsInTooltip)
+									then
 										GameTooltip:Show()
 									else
 										if not blankAdded and R.db.profile.blankLineBeforeTooltipAdditions then
@@ -354,9 +373,11 @@ _G.GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			end
 		end
 	end
-end)
+end
 
-local function processItem(id)
+_G.TooltipDataProcessor.AddTooltipPostCall(_G.Enum.TooltipDataType.Unit, onTooltipSetUnit)
+
+local function processItem(id, tooltip)
 	local blankAdded = false
 	if id then
 		local item
@@ -365,16 +386,21 @@ local function processItem(id)
 		-- This item is used to obtain another item
 		if Rarity.items_to_items[id] then
 			for k, v in pairs(Rarity.items_to_items[id]) do
-				if v.itemId then
+				local playerFaction = UnitFactionGroup("player")
+				local isItemAvailableToPlayer = Rarity.Database.IsItemAvailableToFactionGroup(v, playerFaction)
+				if v.itemId and isItemAvailableToPlayer then
 					local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
 						GetItemInfo(v.itemId)
 					if itemLink or itemName or v.name then
-						if v.known and R.db.profile.hideKnownItemsInTooltip then
-							GameTooltip:Show()
+						if
+							(v.known and R.db.profile.hideKnownItemsInTooltip)
+							or (not v.enabled and R.db.profile.hideUntrackedItemsInTooltip)
+						then
+							tooltip:Show()
 						else
 							if not blankAdded and R.db.profile.blankLineBeforeTooltipAdditions then
 								blankAdded = true
-								GameTooltip:AddLine(" ")
+								tooltip:AddLine(" ")
 							end
 							local chance = select(2, Rarity.Statistics.GetRealDropPercentage(v))
 							local attemptText = " "
@@ -386,7 +412,7 @@ local function processItem(id)
 							if v.known or Rarity.db.profile.tooltipAttempts == false then
 								attemptText = ""
 							end
-							GameTooltip:AddLine(
+							tooltip:AddLine(
 								colorize(
 									(
 										not rarityAdded
@@ -400,10 +426,10 @@ local function processItem(id)
 							)
 							rarityAdded = true
 							if v.known then
-								GameTooltip:AddLine(colorize(L["Already known"], red))
+								tooltip:AddLine(colorize(L["Already known"], red))
 								blankAdded = false
 							end
-							GameTooltip:Show()
+							tooltip:Show()
 						end
 					end
 				end
@@ -420,7 +446,7 @@ local function processItem(id)
 				if itemLink or itemName then
 					if not blankAdded and R.db.profile.blankLineBeforeTooltipAdditions then
 						blankAdded = true
-						GameTooltip:AddLine(" ")
+						tooltip:AddLine(" ")
 					end
 					for k, v in pairs(R.db.profile.groups) do
 						if type(v) == "table" then
@@ -431,14 +457,17 @@ local function processItem(id)
 											itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
 												GetItemInfo(vv.itemId)
 											if itemLink or itemName or vv.name then
-												if vv.known and R.db.profile.hideKnownItemsInTooltip then
-													GameTooltip:Show()
+												if
+													(vv.known and R.db.profile.hideKnownItemsInTooltip)
+													or (not vv.enabled and R.db.profile.hideUntrackedItemsInTooltip)
+												then
+													tooltip:Show()
 												else
 													if
 														not blankAdded and R.db.profile.blankLineBeforeTooltipAdditions
 													then
 														blankAdded = true
-														GameTooltip:AddLine(" ")
+														tooltip:AddLine(" ")
 													end
 													local chance =
 														select(2, Rarity.Statistics.GetRealDropPercentage(vv))
@@ -461,7 +490,7 @@ local function processItem(id)
 													if vv.known or Rarity.db.profile.tooltipAttempts == false then
 														attemptText = ""
 													end
-													GameTooltip:AddLine(
+													tooltip:AddLine(
 														colorize(
 															(
 																not rarityAdded
@@ -475,10 +504,10 @@ local function processItem(id)
 													)
 													rarityAdded = true
 													if vv.known then
-														GameTooltip:AddLine(colorize(L["Already known"], red))
+														tooltip:AddLine(colorize(L["Already known"], red))
 														blankAdded = false
 													end
-													GameTooltip:Show()
+													tooltip:Show()
 												end
 											end
 										end
@@ -493,41 +522,19 @@ local function processItem(id)
 	end
 end
 
-local function processItemString(itemString)
-	if itemString then
-		local id = itemString:match("item:(%d+):")
-		processItem(tonumber(id))
+local function onTooltipSetItem(tooltip, tooltipData)
+	if tooltip ~= _G.GameTooltip and tooltip ~= _G.ItemRefTooltip then
+		return
 	end
+
+	local itemLink = tooltipData.hyperlink
+	if type(itemLink) ~= "string" then
+		return
+	end
+
+	local id = itemLink:match("item:(%d+):")
+	assert(id, "Failed to extract item ID from item link (format might have changed?)")
+	processItem(tonumber(id), tooltip)
 end
 
--- TOOLTIP: ITEMS IN INVENTORY
-
-hooksecurefunc(GameTooltip, "SetBagItem", function(self, bag, slot)
-	local id = GetContainerItemID(bag, slot)
-	processItem(id)
-end)
-
--- TOOLTIP: ITEMS FROM QUESTGIVERS
-
-hooksecurefunc(GameTooltip, "SetQuestItem", function(self, type, index)
-	local itemString = GetQuestItemLink(type, index)
-	processItemString(itemString)
-end)
-
--- TOOLTIP: ITEMS FROM QUEST LOG
-
-hooksecurefunc(GameTooltip, "SetQuestLogItem", function(self, type, index)
-	local itemString = GetQuestLogItemLink(type, index)
-	processItemString(itemString)
-end)
-
--- TOOLTIP: EMISSARY QUEST REWARD
-
--- hooksecurefunc("GameTooltip_AddQuestRewardsToTooltip", function(self, questID)
---    if GetNumQuestLogRewards(questID) > 0 then
---        local _, _, _, _, _, id = GetQuestLogRewardInfo(1, questID)
---        if id then
---            processItem(id)
---        end
---    end
--- end)
+_G.TooltipDataProcessor.AddTooltipPostCall(_G.Enum.TooltipDataType.Item, onTooltipSetItem)

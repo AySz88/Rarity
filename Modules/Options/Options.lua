@@ -33,6 +33,8 @@ local WOD = "WOD"
 local LEGION = "LEGION"
 local BFA = "BFA"
 local SHADOWLANDS = "SHADOWLANDS"
+local DRAGONFLIGHT = "DRAGONFLIGHT"
+local TWW = "TWW"
 local HOLIDAY = "HOLIDAY"
 
 -- Methods of obtaining
@@ -70,6 +72,7 @@ local classes = {
 	["SHAMAN"] = "|c" .. RAID_CLASS_COLORS["SHAMAN"]["colorStr"] .. L["Shaman"] .. "|r",
 	["WARLOCK"] = "|c" .. RAID_CLASS_COLORS["WARLOCK"]["colorStr"] .. L["Warlock"] .. "|r",
 	["WARRIOR"] = "|c" .. RAID_CLASS_COLORS["WARRIOR"]["colorStr"] .. L["Warrior"] .. "|r",
+	["EVOKER"] = "|c" .. RAID_CLASS_COLORS["EVOKER"]["colorStr"] .. L["Evoker"] .. "|r",
 }
 
 local red = Rarity.Enum.Colors.Red
@@ -102,9 +105,7 @@ do
 		R.modulesEnabled.options = true
 
 		R:PrepareOptions()
-		if AddonLoader and AddonLoader.RemoveInterfaceOptions then
-			AddonLoader:RemoveInterfaceOptions("Rarity")
-		end
+
 		LibStub("AceConfig-3.0"):RegisterOptionsTable("Rarity", R.options)
 		R.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Rarity", "Rarity")
 		R.profileOptions = LibStub("AceDBOptions-3.0"):GetOptionsTable(R.db)
@@ -245,57 +246,6 @@ local function allitems()
 		end
 	end
 	return t
-end
-
-local b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-
-local function enc64(data)
-	return (
-		(data:gsub(".", function(x)
-			local r, byte = "", x:byte()
-			for i = 8, 1, -1 do
-				r = r .. (byte % 2 ^ i - byte % 2 ^ (i - 1) > 0 and "1" or "0")
-			end
-			return r
-		end) .. "0000"):gsub("%d%d%d?%d?%d?%d?", function(x)
-			if #x < 6 then
-				return ""
-			end
-			local c = 0
-			for i = 1, 6 do
-				c = c + (x:sub(i, i) == "1" and 2 ^ (6 - i) or 0)
-			end
-			return b:sub(c + 1, c + 1)
-		end) .. ({ "", "==", "=" })[#data % 3 + 1]
-	)
-end
-
-local function dec64(data)
-	if not data then
-		return nil
-	end
-	data = string.gsub(data, "[^" .. b .. "=]", "")
-	return (
-		data:gsub(".", function(x)
-			if x == "=" then
-				return ""
-			end
-			local r, f = "", (b:find(x) - 1)
-			for i = 6, 1, -1 do
-				r = r .. (f % 2 ^ i - f % 2 ^ (i - 1) > 0 and "1" or "0")
-			end
-			return r
-		end):gsub("%d%d%d?%d?%d?%d?%d?%d?", function(x)
-			if #x ~= 8 then
-				return ""
-			end
-			local c = 0
-			for i = 1, 8 do
-				c = c + (x:sub(i, i) == "1" and 2 ^ (8 - i) or 0)
-			end
-			return string.char(c)
-		end)
-	)
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -774,6 +724,20 @@ function R:PrepareOptions()
 									Rarity.GUI:UpdateText()
 								end,
 							},
+							hideUntrackedItemsInTooltip = {
+								type = "toggle",
+								order = newOrder(),
+								width = "double",
+								name = L["Hide untracked items in tooltips"],
+								desc = L["When enabled, Rarity will not add tooltip information for items that aren't being tracked."],
+								get = function()
+									return self.db.profile.hideUntrackedItemsInTooltip
+								end,
+								set = function(info, val)
+									self.db.profile.hideUntrackedItemsInTooltip = val
+									Rarity.GUI:UpdateText()
+								end,
+							},
 						}, -- args
 					}, -- worldTooltips
 					contentCategory = {
@@ -904,6 +868,30 @@ function R:PrepareOptions()
 								end,
 								set = function(info, val)
 									self.db.profile.cats[SHADOWLANDS] = val
+									Rarity.GUI:UpdateText()
+								end,
+							},
+							dragonflight = {
+								type = "toggle",
+								order = newOrder(),
+								name = L["Dragonflight"],
+								get = function()
+									return self.db.profile.cats[DRAGONFLIGHT]
+								end,
+								set = function(info, val)
+									self.db.profile.cats[DRAGONFLIGHT] = val
+									Rarity.GUI:UpdateText()
+								end,
+							},
+							theWarWithin = {
+								type = "toggle",
+								order = newOrder(),
+								name = L["The War Within"],
+								get = function()
+									return self.db.profile.cats[TWW]
+								end,
+								set = function(info, val)
+									self.db.profile.cats[TWW] = val
 									Rarity.GUI:UpdateText()
 								end,
 							},
@@ -1231,7 +1219,7 @@ function R:PrepareOptions()
 							local s
 
 							-- Validate the import (this also can disable the Import button, so we only do validation here)
-							local enc = dec64(self.db.profile.lastImportString)
+							local enc = Rarity.Serialization:DecodeBase64(self.db.profile.lastImportString)
 							if not enc then
 								self.db.profile.importIsError = true
 								s = colorize(L["The selected Rarity Item Pack string is invalid."], red)
@@ -1482,7 +1470,7 @@ function R:PrepareOptions()
 								alert(L["Error compressing item pack"])
 								return
 							end
-							local enc = enc64(c)
+							local enc = Rarity.Serialization:EncodeBase64(c)
 							if not enc then
 								alert(L["Error encoding item pack"])
 								return
@@ -1647,6 +1635,29 @@ function R:PrepareOptions()
 											"Setting repeatable = %s for item %s",
 											tostring(item.repeatable),
 											item.name
+										)
+									)
+								end
+							end
+						end,
+					},
+					untrackAllMounts = {
+						type = "execute",
+						order = newOrder(),
+						name = L["Untrack all mounts"],
+						desc = L["Disable tracking for ALL mounts. You'll have to enable those that you wish to track manually afterwards."]
+							.. " "
+							.. L["Note: Your existing settings will be overwritten."],
+						func = function(info, val)
+							for index, item in pairs(self.db.profile.groups.mounts) do
+								if type(item) == "table" then
+									item.enabled = false
+									Rarity:Debug(
+										format(
+											"Setting enabled = %s for item %s (key: %s)",
+											tostring(item.enabled),
+											tostring(item.name),
+											index
 										)
 									)
 								end

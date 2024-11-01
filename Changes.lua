@@ -1,4 +1,187 @@
 local changes = {
+	["r738"] = {
+		additions = {
+			"Added tracking for Classic Timewalking dungeons (Infinite Timereaver)",
+		},
+		fixes = {
+			"Attempts for Malfunctioning Mechsuit should now be tracked in Mythic keystone dungeons",
+		},
+		contributors = { "DakJaniels" },
+	},
+	["r737"] = {
+		additions = {
+			"Added tracking for Writhing Transmutagen (Khaz Algar Thaumaturgy)",
+			"Added tracking for TWW achievement rares",
+		},
+		fixes = {
+			"Fixed an issue that would prevent attempts from being registered for Sureki Skyrazor",
+			"Dracthyr Evokers should no longer see attempts for Fandral's Seed Pouch and Skull of Corruption",
+		},
+	},
+	["r736"] = {
+		additions = {
+			"Added tracking for Anu'relos (which is now a rare drop from the Mythic Fyrakk encounter)",
+			"Added tracking for Awakened Caches (may contain Machine Defense Unit 1-11)",
+		},
+		fixes = {
+			"Fixed tracking for a number of TWW collectibles that drop from dungeon bosses",
+		},
+		changes = {
+			"Replaced the old AddonLoader mechanism with Blizzard's built-in system to lazy-load the Options module",
+		},
+		contributors = { "DakJaniels" },
+	},
+	["r735"] = {
+		additions = {
+			"Added a number of TWW collectibles to the database (the drop rates are placeholders)",
+		},
+		changes = {
+			"Replaced the Shadowlands category icon with a brighter version that should be easier to see",
+		},
+	},
+	["r734"] = {
+		fixes = {
+			"Improved performance for tooltip hooks",
+		},
+		contributors = { "Fillip H.", "DakJaniels" },
+	},
+	["r733"] = {
+		fixes = {
+			"Fixed errors due to WOW API changes introduced in patch 11.0.2",
+		},
+		changes = {
+			"Setting the auto-hide delay to zero will now keep the main window open until manually closed (in click activation mode only)",
+		},
+		contributors = { "DakJaniels" },
+	},
+	["r732"] = {
+		fixes = {
+			"Implemented a more accurate (though not perfect) detection mechanism for Primal Storms",
+			"Pick Pocket should no longer cause duplicate attempts if there were multiple items in the loot window",
+		},
+	},
+	["r731"] = {
+		additions = {
+			"Added support for Blizzard's addon compartment",
+		},
+	},
+	["r730"] = {
+		fixes = {
+			"Fixed an oversight that would prevent attempts for Quantum Courser from being tracked correctly",
+			"Using Pick Pocket on an enemy should no longer prevent regular loot events from being counted",
+		},
+	},
+	["r729"] = {
+		additions = {
+			"Added tracking for Noble Flying Carpet",
+		},
+	},
+	["r728"] = {
+		additions = {
+			"Added tracking for Clayscale Hornstrider",
+		},
+	},
+	["r727"] = {
+		additions = {
+			"Added tracking for several missing Winter Veil rewards",
+		},
+		fixes = {
+			"Fixed an issue that would prevent attempts for Dreamseed Cache items from being tracked correctly",
+		},
+	},
+	["r726"] = {
+		additions = {
+			"Added tracking for Box of Rattling Chains",
+			"Added tracking for Sunreaver Micro-Sentry",
+			"Added initial tracking for 10.2.0 collectibles",
+		},
+		contributors = { "cyriun" },
+	},
+	["r725"] = {
+		additions = {
+			"Added a new option for toggling the scrolling debug window to Blizzard's keybinding UI",
+			"Added tracking for Arfus (Hallow's End 2023 update)",
+		},
+		fixes = {
+			"Fixed an issue that would cause the achievement-style popup to always be shown when looting a class-specific item",
+			"Duplicate attempts should no longer be added when using Engineering on Arachnoid Harvester",
+			"Fixed tracking for The Horseman's Reins (Hallow's End 2023 update)",
+		},
+		contributors = { "Alexander Stavitsky (astavitsky)" },
+	},
+	["r724"] = {
+		additions = {
+			"Added tracking for Emmah (Disgusting Vat Fishing, in Zskera Vaults)",
+			"Added a new scrolling message frame for inspecting cached debug messages (via `/rarity dump)`",
+		},
+		fixes = {
+			"Fixed an issue that could cause pets that have already been obtained to not be detected as such",
+		},
+		contributors = { "cyriun" },
+	},
+	["r723"] = {
+		additions = {
+			"Added tracking for Darkmoon Rabbit",
+		},
+		fixes = {
+			"Fixed an issue that prevented items requiring world events (e.g., DMF) to be active from being displayed",
+		},
+	},
+	["r722"] = {
+		additions = {
+			"Added tracking for collectibles obtainable in the Zskera Vaults (Forbidden Reach)",
+		},
+		changes = {
+			"The estimated luckiness percentage is now being displayed alongside the attempts count for all items",
+		},
+		fixes = {
+			"Fixed an issue that would incorrectly add duplicate attempts for bosses with both kill statistics and NPC loot",
+			"Rolled back a recent change that caused NPC loot to not be registered when using Rarity with fast-loot addons",
+		},
+		contributors = { "cyriun", "Rubio9" },
+	},
+	["r721"] = {
+		fixes = {
+			"Fixed an issue that would incorrectly add attempts to faction-specific Time Rift mounts for the opposing faction",
+			"Fixed an issue that would break tracking of container items after the mail box was opened",
+		},
+		contributors = { "Rubio9" },
+	},
+	["r720"] = {
+		additions = {
+			"Added tracking for most of the missing Dragonflight collectibles",
+			"Added an experimental button that allows untracking all mounts to the Advanced settings",
+			"Opening BFA Island Expedition crates should now add attempts for all relevant collectibles",
+		},
+		fixes = { "Fixed TomTom waypoint labels not displaying Rarity as their source" },
+		contributors = { "cyriun" },
+	},
+	["r719"] = {
+		additions = {
+			"Created a slash command for toggling the progress bar (for use in macros)",
+			"Added tracking for many Dragonflight collectibles (the list is still incomplete, however)",
+		},
+		fixes = { "Fixed script errors caused by various WOW API changes" },
+		notes = {
+			"Many Dragonflight collectibles, especially pets and toys, are still missing."
+				.. " Please report any that you think should be tracked, but currently aren't.",
+		},
+		contributors = { "cyriun", "Elke Freed", "Tommy Godejord" },
+	},
+	["r718"] = {
+		fixes = { "Fixed script errors caused by API changes in patch 10.0.2" },
+	},
+	["r717"] = {
+		fixes = { "Fixed script errors caused by API changes in patch 10.0" },
+		changes = { "Tooltip additions should now also work for items in the quest log" },
+		contributors = { "Patrick Borgogno", "Tommy Godejord", "teelolws" },
+	},
+	["r716"] = {
+		additions = { "Added defeat detection data for Mythic-difficulty Legion raids" },
+		fixes = {
+			"Added several missing Torghast bosses to the list of NPCs counting for Sturdy Silver Mawrat Harness",
+		},
+	},
 	["r715"] = {
 		additions = { "Added tracking for various collectibles obtained in Zereth Mortis" },
 		fixes = { "Fixed the attempts detection for Skull of Corruption" },

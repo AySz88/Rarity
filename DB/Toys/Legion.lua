@@ -289,6 +289,7 @@ local legionToys = {
 			["SHAMAN"] = true,
 			["WARLOCK"] = true,
 			["WARRIOR"] = true,
+			["EVOKER"] = true,
 		},
 		coords = { { m = 772, i = true } },
 	},
@@ -305,8 +306,6 @@ local legionToys = {
 		tooltipNpcs = {
 			105503,
 			104154, -- Gul'dan (normal)
-			-- todo test LFR
-			-- todo bonus roll
 			111022,
 		}, -- Gul'dan / The Demon Within (Mythic only)
 		chance = 275,

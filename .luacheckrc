@@ -28,7 +28,6 @@ ignore = {
 	"542", -- empty if branch (likely some commented-out code that needs to be reviewed later)
 	"512", -- loop is executed at most once (no idea why, will also have to be reviewed later)
 	"231", -- variable is never accessed (still more readable than replacing everything with underscores... remove later?)
-
 }
 globals = {
 
@@ -56,6 +55,19 @@ globals = {
 	"READY_CHECK_WAITING_TEXTURE",
 
 	-- FrameXML (Blizzard interface)
+	"C_AddOns",
+	"C_Container",
+	"C_Item",
+	"Settings",
+
+	"AuraUtil",
+	"BackdropTemplateMixin",
+	"ChatFontNormal",
+	"FauxScrollFrame_GetOffset",
+	"FauxScrollFrame_OnVerticalScroll",
+	"FauxScrollFrame_Update",
+	"SCROLLING_MESSAGE_FRAME_INSERT_MODE_TOP",
+
 	"AchievementFrame",
 	"AchievementFrame_LoadUI",
 	"AchievementShield_SetPoints",
@@ -147,6 +159,9 @@ globals = {
 	"ICON_LIST",
 	"GAME_LOCALE",
 	"SPLASH_LEGION_NEW_7_1_RIGHT_TITLE",
+
+	-- ENUMS
+	"Enum",
 
 	-- API functions
 	"AbandonQuest",
@@ -742,6 +757,7 @@ globals = {
 	"C_LootJournal.SetLegendaryInventoryTypeFilter",
 	"C_LossOfControl.GetEventInfo",
 	"C_LossOfControl.GetNumEvents",
+	"C_MajorFactions",
 	"C_MapBar",
 	"C_MapBar.BarIsShown",
 	"C_MapBar.GetCurrentValue",
@@ -951,6 +967,7 @@ globals = {
 	"C_PurchaseAPI.SetDisconnectOnLogout",
 	"C_PurchaseAPI.SetVASProductReady",
 	"C_PvP",
+	"C_QuestLog",
 	"C_Questline",
 	"C_Questline.GetNumAvailableQuestlines",
 	"C_Questline.GetQuestlineInfoByIndex",
@@ -1221,6 +1238,7 @@ globals = {
 	"C_WowTokenSecure.RedeemToken",
 	"C_WowTokenSecure.RedeemTokenConfirm",
 	"C_WowTokenSecure.WillKickFromWorld",
+	"CVarCallbackRegistry",
 	"CalculateAuctionDeposit",
 	"CalendarAddEvent",
 	"CalendarCanAddEvent",

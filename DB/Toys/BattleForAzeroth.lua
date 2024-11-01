@@ -9,7 +9,8 @@ local bfaToys = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
 		isToy = true,
-		method = CONSTANTS.DETECTION_METHODS.SPECIAL,
+		method = CONSTANTS.DETECTION_METHODS.USE,
+		items = { 173994 },
 		name = L["Oomgut Ritual Drum"],
 		itemId = 163795,
 		chance = 250,
@@ -19,39 +20,19 @@ local bfaToys = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
 		isToy = true,
-		method = CONSTANTS.DETECTION_METHODS.SPECIAL,
+		method = CONSTANTS.DETECTION_METHODS.USE,
+		items = { 173992 },
 		name = L["Whiskerwax Candle"],
 		itemId = 163924,
 		chance = 250,
 		coords = { { m = CONSTANTS.UIMAPIDS.BORALUS }, { m = CONSTANTS.UIMAPIDS.DAZARALOR } },
 	},
-	-- ["Yaungol Oil Stove"] = { -- NYI as of 18/01/19
-	-- cat = CONSTANTS.ITEM_CATEGORIES.BFA,
-	-- type = CONSTANTS.ITEM_TYPES.ITEM,
-	-- isToy = true,
-	-- method = CONSTANTS.DETECTION_METHODS.SPECIAL,
-	-- name = L["Yaungol Oil Stove"],
-	-- itemId = 164371,
-	-- chance = 250,
-	-- groupSize = 3,
-	-- },
-
-	-- ["Jinyu Light Globe"] = { -- NYI as of 18/01/19
-	-- cat = CONSTANTS.ITEM_CATEGORIES.BFA,
-	-- type = CONSTANTS.ITEM_TYPES.ITEM,
-	-- isToy = true,
-	-- method = CONSTANTS.DETECTION_METHODS.SPECIAL,
-	-- name = L["Jinyu Light Globe"],
-	-- itemId = 164372,
-	-- chance = 250,
-	-- groupSize = 3,
-	-- },
-
 	["Enchanted Soup Stone"] = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
 		isToy = true,
-		method = CONSTANTS.DETECTION_METHODS.SPECIAL,
+		method = CONSTANTS.DETECTION_METHODS.USE,
+		items = { 173992 },
 		name = L["Enchanted Soup Stone"],
 		itemId = 164373,
 		chance = 250,
@@ -61,7 +42,8 @@ local bfaToys = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
 		isToy = true,
-		method = CONSTANTS.DETECTION_METHODS.SPECIAL,
+		method = CONSTANTS.DETECTION_METHODS.USE,
+		items = { 173994 },
 		name = L["Magic Monkey Banana"],
 		itemId = 164374,
 		chance = 250,
@@ -71,23 +53,13 @@ local bfaToys = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
 		isToy = true,
-		method = CONSTANTS.DETECTION_METHODS.SPECIAL,
+		method = CONSTANTS.DETECTION_METHODS.USE,
+		items = { 173994 },
 		name = L["Bad Mojo Banana"],
 		itemId = 164375,
 		chance = 250,
 		coords = { { m = CONSTANTS.UIMAPIDS.BORALUS }, { m = CONSTANTS.UIMAPIDS.DAZARALOR } },
 	},
-	-- ["Regenerating Banana Bunch"] = { -- NYI as of 18/01/19
-	-- cat = CONSTANTS.ITEM_CATEGORIES.BFA,
-	-- type = CONSTANTS.ITEM_TYPES.ITEM,
-	-- isToy = true,
-	-- method = CONSTANTS.DETECTION_METHODS.SPECIAL,
-	-- name = L["Regenerating Banana Bunch"],
-	-- itemId = 164377,
-	-- chance = 250,
-	-- groupSize = 3,
-	-- },
-
 	["Brazier Cap"] = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
@@ -241,8 +213,6 @@ local bfaToys = {
 		npcs = { 138122 },
 		questId = { 53001, 53002 }, -- Loot lockout
 		chance = 100, -- Need more data. Until then, this is a blind guess...
-		groupSize = 3,
-		equalOdds = true,
 		requiresAlliance = true,
 		coords = { { m = CONSTANTS.UIMAPIDS.ARATHI_HIGHLANDS, x = 37.09, y = 39.21, n = L["Doom's Howl"] } },
 		enableCoin = true,
@@ -257,8 +227,6 @@ local bfaToys = {
 		npcs = { 137374 },
 		questId = { 53001, 53002 }, -- Loot Lockout
 		chance = 100, -- Blind guess :|
-		groupSize = 3,
-		equalOdds = true,
 		requiresHorde = true,
 		coords = { { m = CONSTANTS.UIMAPIDS.ARATHI_HIGHLANDS, x = 37.09, y = 39.21, n = L["The Lion's Roar"] } },
 		enableCoin = true,
@@ -287,17 +255,6 @@ local bfaToys = {
 		chance = 10,
 		coords = { { m = CONSTANTS.UIMAPIDS.STORMSONG_VALLEY }, { m = CONSTANTS.UIMAPIDS.ZULDAZAR } },
 	},
-	-- ["Kojo's Master Matching Set"] = { -- Note: NYI as of 19/04/2019
-	-- cat = CONSTANTS.ITEM_CATEGORIES.BFA,
-	-- type = CONSTANTS.ITEM_TYPES.ITEM,
-	-- isToy = true,
-	-- method = CONSTANTS.DETECTION_METHODS.USE,
-	-- name = L["Kojo's Master Matching Set"],
-	-- itemId = 166851,
-	-- items = { 166245 },
-	-- chance = 10,
-	-- },
-
 	["Warbeast Kraal Dinner Bell"] = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
@@ -331,17 +288,6 @@ local bfaToys = {
 		chance = 10,
 		coords = { { m = CONSTANTS.UIMAPIDS.VOLDUN } },
 	},
-	-- ["Words of Akunda"] = { -- Note: NYI as of 19/04/2019
-	-- cat = CONSTANTS.ITEM_CATEGORIES.BFA,
-	-- type = CONSTANTS.ITEM_TYPES.ITEM,
-	-- isToy = true,
-	-- method = CONSTANTS.DETECTION_METHODS.USE,
-	-- name = L["Words of Akunda"],
-	-- itemId = 165021,
-	-- items = { 166290 },
-	-- chance = 10,
-	-- },
-
 	["Meerah's Jukebox"] = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
 		type = CONSTANTS.ITEM_TYPES.ITEM,
@@ -616,7 +562,7 @@ local bfaToys = {
 		name = L["Hell-Bent Bracers"],
 		itemId = 169303,
 		npcs = { 158636 },
-		chance = 20, -- Blind guess (no data)
+		chance = 33,
 		questId = { 57688 },
 		coords = { { m = CONSTANTS.UIMAPIDS.ULDUM, x = 49.35, y = 82.29, n = L["The Grand Executor"] } },
 	},
@@ -628,7 +574,7 @@ local bfaToys = {
 		name = L["Budget K'thir Disguise"],
 		itemId = 174874,
 		npcs = { 157473 },
-		chance = 20, -- Blind guess (no data)
+		chance = 10,
 		questId = { 57438 },
 		coords = {
 			{ m = CONSTANTS.UIMAPIDS.ULDUM, x = 50, y = 88, n = L["Yiphrim the Will Ravager"] },
@@ -644,7 +590,7 @@ local bfaToys = {
 		name = L["Trans-mogu-rifier"],
 		itemId = 174873,
 		npcs = { 155958 },
-		chance = 20, -- Blind guess (no data)
+		chance = 33,
 		questId = { 58507 },
 		coords = { { m = CONSTANTS.UIMAPIDS.VALE_OF_ETERNAL_BLOSSOMS, x = 29.13, y = 22.07, n = L["Tashara"] } },
 	},
@@ -751,8 +697,6 @@ local bfaToys = {
 		chance = 75,
 		coords = { { m = CONSTANTS.UIMAPIDS.ULDUM, x = 55, y = 51, n = L["Gaze of N'Zoth"] } },
 		sourceText = format(L["Shares a spawn with %s"], L["Foul Observer"]),
-		-- Combine with X to create Y
-		-- Only available during the X assault
 	},
 	["All-Seeing Left Eye"] = {
 		cat = CONSTANTS.ITEM_CATEGORIES.BFA,
@@ -762,7 +706,7 @@ local bfaToys = {
 		npcs = { 154495 },
 		itemId = 175141,
 		questId = { 56303 },
-		chance = 75,
+		chance = 50,
 		coords = {
 			{ m = CONSTANTS.UIMAPIDS.VALE_OF_ETERNAL_BLOSSOMS, x = 52.51, y = 62.14, n = L["Will of N'zoth"] },
 		},
